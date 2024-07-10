@@ -60,7 +60,7 @@ const SignIn: React.FC = () => {
       }
     } catch (error: any) {
       console.error("Error logging in:", error.response?.data || error.message);
-      toast.error(error.response?.data.message || "Network response was not ok");
+      toast.error(error.response?.data.message || "Password atau Email anda salah");
     } finally {
       setLoading(false);
     }
