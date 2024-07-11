@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/authContext";
-import { Button, TextField, Container, Typography, Box, Chip, Stack } from "@mui/material";
+import { Button, TextField, Container, Typography, Box } from "@mui/material";
 import Layout from "../../components/main-layout";
 import { Borrow } from "../../utils/apis/borrow";
 import moment from "moment";
@@ -22,12 +22,12 @@ const BookBorrowForm: React.FC = () => {
     setSuccess(null);
 
     try {
-      // Format tanggal sebelum mengirimkan
       const formattedDate = moment(borrowDate).toISOString();
-      console.log("Tanggal Peminjaman Terformat:", formattedDate); // Log tanggal terformat
+      console.log("Tanggal Peminjaman Terformat:", formattedDate);
 
-      const response = await Borrow([parseInt(bookId)], formattedDate); // Menggunakan array bookIds dengan satu item
+      const response = await Borrow([parseInt(bookId)], formattedDate);
       console.log("Peminjaman Buku:", response);
+
       setSuccess("Buku berhasil dipinjam");
       navigate("/mybooks");
     } catch (error: any) {
@@ -40,14 +40,7 @@ const BookBorrowForm: React.FC = () => {
   return (
     <Layout>
       <Container component="main" maxWidth="xs">
-        <Box
-          sx={{
-            marginTop: 8,
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-          }}
-        >
+        <Box sx={{ marginTop: 8, display: "flex", flexDirection: "column", alignItems: "center" }}>
           <Typography component="h1" variant="h5">
             Peminjaman Buku
           </Typography>
@@ -61,9 +54,7 @@ const BookBorrowForm: React.FC = () => {
               label="Tanggal Peminjaman"
               type="datetime-local"
               id="borrowDate"
-              InputLabelProps={{
-                shrink: true,
-              }}
+              InputLabelProps={{ shrink: true }}
               value={borrowDate}
               onChange={(e) => setBorrowDate(e.target.value)}
             />
