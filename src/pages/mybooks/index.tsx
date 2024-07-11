@@ -4,15 +4,16 @@ import { CircularProgress, Typography, Box, Grid, Card, CardActionArea, CardMedi
 import Layout from "@/components/main-layout";
 
 const MyBooks: React.FC = () => {
-  const [books, setBooks] = useState([]);
+  const [books, setBooks] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchBooks = async () => {
       try {
-        const respone = await getBorrow(); // Mengambil data buku dari API
-        setBooks(respone.payload.datas); // Menyimpan data buku ke dalam state
+        const booksData = await getBorrow(); // Mengambil data buku dari API
+        setBooks(booksData); // Menyimpan data buku ke dalam state
+        console.log("hasil response my books", booksData);
         setLoading(false); // Menghentikan loading setelah data berhasil dimuat
       } catch (error: any) {
         setError(error.message || "Failed to fetch books"); // Menangani error jika terjadi kesalahan saat mengambil data
@@ -42,7 +43,7 @@ const MyBooks: React.FC = () => {
             <Grid item key={book.id} xs={3}>
               <Card>
                 <CardActionArea>
-                  <CardMedia component="img" height="140" image={book.book.cover_image} alt={book.title} />
+                  <CardMedia component="img" height="140" image={book.cover_image} alt={book.title} />
                   <CardContent>
                     <Typography gutterBottom variant="h5" component="div">
                       {book.title}
