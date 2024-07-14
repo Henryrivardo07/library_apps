@@ -40,7 +40,6 @@ const ShowAll = () => {
   return (
     <>
       <Layout>
-        <ButtonDarkMode />
         <div className={`p-4 ${darkMode ? "bg-gray-800 text-white" : "bg-white text-gray-900"}`}>
           <h1 className="text-3xl font-bold mb-4 text-center">All Books</h1>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">

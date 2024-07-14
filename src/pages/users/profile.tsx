@@ -1,31 +1,54 @@
 import React from "react";
 import Avatar from "@mui/material/Avatar";
-import { useAuth } from "@/context/authContext";
 import Layout from "../../components/main-layout";
-import { Container, Typography, Box } from "@mui/material";
+import { Container, Paper } from "@mui/material";
+import { useDarkMode } from "../../context/DarkModeContext";
 
 const Profile: React.FC = () => {
-  const { avatar } = useAuth();
+  const { darkMode } = useDarkMode();
 
   return (
     <Layout>
-      <Container component="main" maxWidth="xs">
-        <Box
+      <Container
+        component="main"
+        maxWidth="xs"
+        sx={{
+          height: "100vh",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <Paper
+          elevation={3}
           sx={{
-            marginTop: 8,
+            width: "50%",
+            bgcolor: darkMode ? "primary.dark" : "background.default",
+            color: darkMode ? "common.white" : "text.primary",
+            padding: 4,
+            borderRadius: 8,
+            boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)",
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
+            justifyContent: "center",
           }}
         >
-          <Avatar sx={{ m: 1, bgcolor: "secondary.main" }} src={avatar || ""} />
-          <Typography component="h1" variant="h5">
-            Profile
-          </Typography>
-          <Typography variant="body1" color="textSecondary">
-            {avatar ? "Avatar uploaded successfully!" : "No avatar uploaded."}
-          </Typography>
-        </Box>
+          <Avatar
+            sx={{
+              width: 120,
+              height: 120,
+              bgcolor: darkMode ? "primary.main" : "secondary.main",
+              marginBottom: 2,
+            }}
+            alt="Profile Picture"
+            src="/avatar.jpg" // Ganti dengan URL avatar Anda atau gunakan avatar dari konteks autentikasi
+          />
+          <div>
+            <h1 style={{ textAlign: "center" }}>Profile</h1>
+            <p style={{ textAlign: "center" }}>{darkMode ? "Dark mode is on!" : "Light mode is on!"}</p>
+          </div>
+        </Paper>
       </Container>
     </Layout>
   );

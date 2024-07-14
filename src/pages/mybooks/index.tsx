@@ -11,39 +11,46 @@ const MyBooks: React.FC = () => {
   useEffect(() => {
     const fetchBooks = async () => {
       try {
-        const booksData = await getBorrow(); // Mengambil data buku dari API
-        setBooks(booksData); // Menyimpan data buku ke dalam state
-        console.log("hasil response my books", booksData);
-        setLoading(false); // Menghentikan loading setelah data berhasil dimuat
+        const booksData = await getBorrow();
+        setBooks(booksData);
+        setLoading(false);
       } catch (error: any) {
-        setError(error.message || "Failed to fetch books"); // Menangani error jika terjadi kesalahan saat mengambil data
-        setLoading(false); // Menghentikan loading dalam kondisi error
+        setError(error.message || "Failed to fetch books");
+        setLoading(false);
       }
     };
 
-    fetchBooks(); // Memanggil fungsi fetchBooks saat komponen dimuat
+    fetchBooks();
   }, []);
 
   if (loading) {
-    return <CircularProgress />; // Menampilkan spinner loading jika data sedang dimuat
+    return <CircularProgress />;
   }
 
   if (error) {
-    return <Typography color="error">{error}</Typography>; // Menampilkan pesan error jika gagal mengambil data
+    return <Typography color="error">{error}</Typography>;
   }
 
   return (
     <Layout>
-      <Box>
+      <Box p={3}>
         <Typography variant="h4" gutterBottom>
           My Books
         </Typography>
-        <Grid container spacing={3}>
+        <Grid container spacing={3} justifyContent="center">
           {books.map((book: any) => (
-            <Grid item key={book.id} xs={3}>
+            <Grid item key={book.id} xs={12} sm={6} md={4} lg={3}>
               <Card>
                 <CardActionArea>
-                  <CardMedia component="img" height="140" image={book.cover_image} alt={book.title} />
+                  <CardMedia
+                    title={book.title}
+                    component="img"
+                    height="50" // Sesuaikan tinggi gambar sesuai keinginan Anda
+                    image={book.cover_image || "/placeholder-book.jpg"} // Ganti dengan placeholder jika cover_image tidak ada
+                    alt={book.title}
+                    sx={{ objectFit: "cover" }} // Mengatur properti objectFit
+                    loading="lazy" // Menggunakan lazy loading
+                  />
                   <CardContent>
                     <Typography gutterBottom variant="h5" component="div">
                       {book.title}

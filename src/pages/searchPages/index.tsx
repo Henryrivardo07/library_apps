@@ -4,7 +4,7 @@ import { IBook } from "@/utils/types/book";
 import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { useDarkMode } from "../../context/DarkModeContext";
-import ButtonDarkMode from "@/components/ui/button-dark-mode";
+import { Container, Grid, Typography, Paper } from "@mui/material";
 
 const SearchPage: React.FC = () => {
   const location = useLocation();
@@ -54,22 +54,29 @@ const SearchPage: React.FC = () => {
 
   return (
     <Layout>
-      <ButtonDarkMode />
-      <div className="container mx-auto p-4">
-        <div className="flex justify-between items-center mb-8">
-          <h1 className="text-2xl font-bold">Search Results for "{query}"</h1>
-        </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
-          {books.map((book) => (
-            <div key={book.id} className={`bg-white rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-300 ${darkMode ? "dark:bg-gray-800" : "dark:bg-white"}`}>
-              <img src={book.cover_image} alt={book.title} className="max-w-56 object-cover mx-auto" />
-              <div className="p-4">
-                <h2 className={`text-xl font-semibold mb-2 ${darkMode ? "dark:text-gray-200" : "text-gray-800"}`}>{book.title}</h2>
-                <p className={`text-gray-700 ${darkMode ? "dark:text-gray-400" : "text-gray-600"}`}>{book.author}</p>
-              </div>
-            </div>
-          ))}
-        </div>
+      <div style={{ minHeight: "100vh", paddingTop: 20, paddingBottom: 20 }}>
+        <Container maxWidth="lg">
+          <Typography variant="h4" gutterBottom align="center">
+            Search Results for "{query}"
+          </Typography>
+          <Grid container spacing={3}>
+            {books.map((book) => (
+              <Grid item key={book.id} xs={12} sm={6} md={4} lg={3}>
+                <Paper elevation={3} className={`bg-white rounded-lg overflow-hidden hover:shadow-lg transition-shadow duration-300 ${darkMode ? "dark:bg-gray-800" : "dark:bg-white"}`}>
+                  <img src={book.cover_image} alt={book.title} className="w-full h-auto object-cover" style={{ aspectRatio: "2/3" }} />
+                  <div className="p-4">
+                    <Typography variant="h6" gutterBottom className={`${darkMode ? "dark:text-gray-200" : "text-gray-800"}`}>
+                      {book.title}
+                    </Typography>
+                    <Typography variant="body2" className={`${darkMode ? "dark:text-gray-400" : "text-gray-600"}`}>
+                      {book.author}
+                    </Typography>
+                  </div>
+                </Paper>
+              </Grid>
+            ))}
+          </Grid>
+        </Container>
       </div>
     </Layout>
   );

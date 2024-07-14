@@ -56,3 +56,12 @@ export const searchBook = async (query: string): Promise<IRespone<IPagination<IB
     throw new Error("Error fetching books: " + error.message);
   }
 };
+export const updateBook = async (id_book: string, book: IBookDetail): Promise<void> => {
+  try {
+    const response = await axiosWithConfig.put(`/books/${id_book}`, book);
+    console.log("Book updated successfully:", response.data);
+  } catch (error: any) {
+    console.error("Error updating book:", error.response?.data || error.message);
+    throw new Error(error.response?.data.message || "Network response was not ok");
+  }
+};

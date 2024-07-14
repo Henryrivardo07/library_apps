@@ -10,7 +10,6 @@ import ButtonDarkMode from "@/components/ui/button-dark-mode";
 const Home = () => {
   return (
     <Layout>
-      <ButtonDarkMode />
       <MyCaraousel />
       <Category />
       <BookList />

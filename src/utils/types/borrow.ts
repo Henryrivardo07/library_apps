@@ -43,3 +43,12 @@ export interface BorrowData {
     datas: IBorrow[];
   };
 }
+export interface getBorrowAdminType {
+  id: string;
+  title: string;
+  author: string;
+  borrow_date: string;
+  available: boolean;
+  user_id: number;
+  full_name: string;
+}

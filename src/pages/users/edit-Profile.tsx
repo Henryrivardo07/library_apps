@@ -1,30 +1,23 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import * as z from "zod";
+import toast from "react-hot-toast";
+import Layout from "../../components/main-layout";
+import { useAuth } from "@/context/authContext";
+import { login } from "../../utils/apis/auth";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Avatar as CustomAvatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Button as CustomButton } from "@/components/ui/button";
-import Layout from "../../components/main-layout";
-import { useAuth } from "@/context/authContext";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
-import CssBaseline from "@mui/material/CssBaseline";
-import TextField from "@mui/material/TextField";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Checkbox from "@mui/material/Checkbox";
-import Link from "@mui/material/Link";
-import Grid from "@mui/material/Grid";
-import Box from "@mui/material/Box";
-import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { useNavigate } from "react-router-dom";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import * as z from "zod";
-import toast, { Toaster } from "react-hot-toast";
-import { login } from "../../utils/apis/auth";
+import Grid from "@mui/material/Grid";
+import { createTheme, ThemeProvider, styled } from "@mui/material/styles";
 
 // Schema validasi menggunakan Zod
 const schema = z.object({
@@ -40,6 +33,7 @@ type FormData = z.infer<typeof schema>;
 const EditProfile: React.FC = () => {
   const [avatar, setAvatar] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const [darkMode, setDarkMode] = useState(false); // State for dark mode
   const { login: contextLogin, avatar: authAvatar } = useAuth();
   const navigate = useNavigate();
   const {
@@ -49,6 +43,10 @@ const EditProfile: React.FC = () => {
   } = useForm<FormData>({
     resolver: zodResolver(schema),
   });
+
+  const toggleDarkMode = () => {
+    setDarkMode(!darkMode);
+  };
 
   const onSubmit = async (data: FormData) => {
     setLoading(true);
@@ -86,65 +84,73 @@ const EditProfile: React.FC = () => {
     }
   };
 
+  // Theme for dark mode
+  const theme = createTheme({
+    palette: {
+      mode: darkMode ? "dark" : "light",
+    },
+  });
+
   return (
-    <Layout>
-      <Card className="w-full max-w-2xl mx-auto mt-28">
-        <CardHeader>
-          <CardTitle>Edit Profile</CardTitle>
-          <CardDescription>Update your profile information.</CardDescription>
-        </CardHeader>
-        <CardContent className="grid gap-6">
-          <form onSubmit={handleSubmit(onSubmit)}>
-            <div className="grid grid-cols-2 gap-6">
-              <div className="space-y-2">
-                <Label htmlFor="fullName">Full Name</Label>
-                <Input id="fullName" placeholder="Enter your full name" {...register("fullName")} />
-                {errors.fullName && <p className="text-red-600">{errors.fullName.message}</p>}
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="email">Email</Label>
-                <Input id="email" type="email" placeholder="Enter your email" {...register("email")} />
-                {errors.email && <p className="text-red-600">{errors.email.message}</p>}
-              </div>
-            </div>
-            <div className="grid grid-cols-2 gap-6">
-              <div className="space-y-2">
-                <Label htmlFor="password">Password</Label>
-                <Input id="password" type="password" placeholder="Enter your password" {...register("password")} />
-                {errors.password && <p className="text-red-600">{errors.password.message}</p>}
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="address">Address</Label>
-                <Input id="address" placeholder="Enter your address" {...register("address")} />
-              </div>
-            </div>
-            <div className="grid grid-cols-2 gap-6">
-              <div className="space-y-2">
-                <Label htmlFor="phoneNumber">Phone Number</Label>
-                <Input id="phoneNumber" type="tel" placeholder="Enter your phone number" {...register("phoneNumber")} />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="profilePicture">Profile Picture</Label>
-                <div className="flex items-center gap-4">
-                  <CustomAvatar className="h-16 w-16">
-                    <AvatarImage src={authAvatar || "/placeholder-user.jpg"} />
-                    <AvatarFallback>JP</AvatarFallback>
-                  </CustomAvatar>
-                  <Button variant="outline" component="label">
-                    <div className="mr-2 h-4 w-4" />
-                    Upload
-                    <input type="file" hidden onChange={handleImageUpload} />
-                  </Button>
-                </div>
-              </div>
-            </div>
-            <CardFooter className="flex justify-end">
-              <CustomButton type="submit">Save Changes</CustomButton>
-            </CardFooter>
-          </form>
-        </CardContent>
-      </Card>
-    </Layout>
+    <ThemeProvider theme={theme}>
+      <Layout>
+        <Container component="main" maxWidth="xs" sx={{ height: "100vh", display: "flex", alignItems: "center" }}>
+          <Card sx={{ width: "100%", boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)", borderRadius: "8px" }}>
+            <CardHeader>
+              <CardTitle>Edit Profile</CardTitle>
+              <CardDescription>Update your profile information.</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <form onSubmit={handleSubmit(onSubmit)} style={{ marginBottom: 0 }}>
+                <Grid container spacing={2}>
+                  <Grid item xs={12}>
+                    <Label htmlFor="fullName">Full Name</Label>
+                    <Input id="fullName" placeholder="Enter your full name" {...register("fullName")} />
+                    {errors.fullName && <Typography color="error">{errors.fullName.message}</Typography>}
+                  </Grid>
+                  <Grid item xs={12}>
+                    <Label htmlFor="email">Email</Label>
+                    <Input id="email" type="email" placeholder="Enter your email" {...register("email")} />
+                    {errors.email && <Typography color="error">{errors.email.message}</Typography>}
+                  </Grid>
+                  <Grid item xs={12}>
+                    <Label htmlFor="password">Password</Label>
+                    <Input id="password" type="password" placeholder="Enter your password" {...register("password")} />
+                    {errors.password && <Typography color="error">{errors.password.message}</Typography>}
+                  </Grid>
+                  <Grid item xs={12}>
+                    <Label htmlFor="address">Address</Label>
+                    <Input id="address" placeholder="Enter your address" {...register("address")} />
+                  </Grid>
+                  <Grid item xs={12}>
+                    <Label htmlFor="phoneNumber">Phone Number</Label>
+                    <Input id="phoneNumber" type="tel" placeholder="Enter your phone number" {...register("phoneNumber")} />
+                  </Grid>
+                  <Grid item xs={12}>
+                    <Label htmlFor="profilePicture">Profile Picture</Label>
+                    <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+                      <CustomAvatar>
+                        <AvatarImage src={authAvatar || "/placeholder-user.jpg"} />
+                        <AvatarFallback>JP</AvatarFallback>
+                      </CustomAvatar>
+                      <Button variant="outlined" component="label">
+                        Upload
+                        <input type="file" hidden onChange={handleImageUpload} />
+                      </Button>
+                    </div>
+                  </Grid>
+                </Grid>
+                <CardFooter>
+                  <CustomButton type="submit" disabled={loading}>
+                    Save Changes
+                  </CustomButton>
+                </CardFooter>
+              </form>
+            </CardContent>
+          </Card>
+        </Container>
+      </Layout>
+    </ThemeProvider>
   );
 };
 
