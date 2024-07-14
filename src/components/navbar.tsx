@@ -1,13 +1,11 @@
 import React from "react";
 import Search from "./search";
-import { IoIosNotifications } from "react-icons/io";
-import { FaShoppingCart } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import DropdownWithImage from "./dropDownWithIcon";
 import { useAuth } from "@/context/authContext";
 
 const Navbar: React.FC = () => {
-  const { token } = useAuth();
+  const { token, role } = useAuth();
   const optionsProps = token ? [] : ["Login", "Register"];
 
   const handleSearch = (query: string) => {
@@ -23,10 +21,11 @@ const Navbar: React.FC = () => {
       <Search onSearch={handleSearch} placeholder="Search Books..." />
 
       <div className="flex items-center space-x-4">
-        <IoIosNotifications className="text-2xl" />
-        <Link to="/cart" className="flex items-center space-x-1">
-          <Link to={"/borrow"}>Pinjam Buku</Link>
-        </Link>
+        {role !== "admin" && (
+          <Link to="/borrow" className="flex items-center space-x-1">
+            Pinjam Buku
+          </Link>
+        )}
         <DropdownWithImage optionsProps={optionsProps} placeholder="Account" onSelect={(option) => console.log(option)} />
       </div>
     </div>

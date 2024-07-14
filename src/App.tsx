@@ -1,4 +1,5 @@
 // src/App.tsx
+
 import React from "react";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 
@@ -13,19 +14,33 @@ import BookBorrowForm from "./pages/borrow";
 import MyBooks from "./pages/mybooks";
 import Profile from "./pages/users/profile";
 import EditProfile from "./pages/users/edit-Profile";
+import Dashboard from "./pages/dasboard/dashboard"; // Import halaman dashboard
+import ProtectedRoute from "./routes/protech-route"; // Pastikan pathnya sesuai
+import EditBorrow from "./pages/edit-borrow/editBorrow";
+import ManageBook from "./pages/manageBook/manageBook";
+import EditBook from "./pages/manageBook/editBook";
 
 const router = createBrowserRouter([
-  { path: "/", element: <Home /> },
-  { path: "/signin", element: <SignIn /> },
-  { path: "/signup", element: <SignUp /> },
-  { path: "/books/:id_book", element: <DetailPages /> },
-  { path: "/books", element: <CategoryPages /> },
-  { path: "/showall", element: <ShowAll /> },
-  { path: "/search", element: <SearchPage /> },
-  { path: "/borrow", element: <BookBorrowForm /> },
-  { path: "/mybooks", element: <MyBooks /> },
-  { path: "/myprofile", element: <Profile /> },
-  { path: "/myprofile/edit", element: <EditProfile /> },
+  {
+    element: <ProtectedRoute />,
+    children: [
+      { path: "/", element: <Home /> },
+      { path: "/signin", element: <SignIn /> },
+      { path: "/signup", element: <SignUp /> },
+      { path: "/books/:id_book", element: <DetailPages /> },
+      { path: "/books", element: <CategoryPages /> },
+      { path: "/showall", element: <ShowAll /> },
+      { path: "/search", element: <SearchPage /> },
+      { path: "/borrow", element: <BookBorrowForm /> },
+      { path: "/mybooks", element: <MyBooks /> },
+      { path: "/myprofile", element: <Profile /> },
+      { path: "/myprofile/edit", element: <EditProfile /> },
+      { path: "/dashboard", element: <Dashboard /> }, // Tambahkan rute untuk dashboard
+      { path: "/editBorrow/:id", element: <EditBorrow /> },
+      { path: "/managebook", element: <ManageBook /> },
+      { path: "/editbook/:id", element: <EditBook /> },
+    ],
+  },
 ]);
 
 function App() {

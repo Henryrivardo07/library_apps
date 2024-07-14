@@ -1,3 +1,5 @@
+// src/pages/SignIn.tsx
+
 import React, { useState } from "react";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
@@ -13,13 +15,14 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import Layout from "../../components/main-layout";
-import { login } from "../../utils/apis/auth";
+import { login as loginService } from "../../utils/apis/auth";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/context/authContext";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import toast, { Toaster } from "react-hot-toast";
+import { useDarkMode } from "@/context/DarkModeContext";
 
 const schema = z.object({
   email: z.string().email({ message: "Invalid email address" }),
@@ -33,6 +36,7 @@ const SignIn: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const { login: contextLogin } = useAuth();
+  const { darkMode } = useDarkMode();
   const {
     register,
     handleSubmit,
@@ -43,18 +47,23 @@ const SignIn: React.FC = () => {
 
   const onSubmit = async (data: FormData) => {
     setLoading(true);
-    const avatarFile = data.avatar && data.avatar[0] ? data.avatar[0] : null;
+    const avatarFile = avatar; // Use the avatar state for upload
 
     try {
-      const response = await login(data.email, data.password, avatarFile);
+      const response = await loginService(data.email, data.password, avatarFile);
       console.log("Login response:", response);
 
       if (response.payload && response.payload.token) {
-        const token = response.payload.token;
-        const avatar = response.payload.avatar || "";
-        contextLogin(token, avatar);
+        const { token, avatar, role } = response.payload;
+        contextLogin(token, avatar, role); // Pass role to contextLogin
         toast.success("Login successful!");
-        navigate("/");
+
+        // Redirect based on role
+        if (role === "admin") {
+          navigate("/dashboard");
+        } else {
+          navigate("/");
+        }
       } else {
         throw new Error("Invalid login response");
       }
@@ -77,18 +86,28 @@ const SignIn: React.FC = () => {
     }
   };
 
+  const theme = createTheme({
+    palette: {
+      mode: darkMode ? "dark" : "light",
+    },
+  });
+
   return (
     <Layout>
-      <ThemeProvider theme={createTheme()}>
-        <Container component="main" maxWidth="xs">
+      <ThemeProvider theme={theme}>
+        <Container component="main" maxWidth="xs" className="min-h-screen flex items-center justify-center mt-40">
           <CssBaseline />
           <Toaster />
           <Box
             sx={{
-              marginTop: 8,
               display: "flex",
               flexDirection: "column",
               alignItems: "center",
+              backgroundColor: darkMode ? "rgba(31, 41, 55, 0.8)" : "rgba(255, 255, 255, 0.8)",
+              padding: 4,
+              borderRadius: 2,
+              boxShadow: 3,
+              color: darkMode ? "white" : "black",
             }}
           >
             <label htmlFor="upload-avatar">
@@ -101,12 +120,24 @@ const SignIn: React.FC = () => {
               Sign in
             </Typography>
             <Box component="form" onSubmit={handleSubmit(onSubmit)} noValidate sx={{ mt: 1 }}>
-              <TextField margin="normal" required fullWidth id="email" label="Email Address" autoComplete="email" autoFocus {...register("email")} error={!!errors.email} helperText={errors.email?.message} />
               <TextField
                 margin="normal"
                 required
                 fullWidth
-                name="password"
+                id="email"
+                label="Email Address"
+                autoComplete="email"
+                autoFocus
+                {...register("email")}
+                error={!!errors.email}
+                helperText={errors.email?.message}
+                InputLabelProps={{ style: { color: darkMode ? "white" : "black" } }}
+                InputProps={{ style: { color: darkMode ? "white" : "black" } }}
+              />
+              <TextField
+                margin="normal"
+                required
+                fullWidth
                 label="Password"
                 type="password"
                 id="password"
@@ -114,6 +145,8 @@ const SignIn: React.FC = () => {
                 {...register("password")}
                 error={!!errors.password}
                 helperText={errors.password?.message}
+                InputLabelProps={{ style: { color: darkMode ? "white" : "black" } }}
+                InputProps={{ style: { color: darkMode ? "white" : "black" } }}
               />
               <FormControlLabel control={<Checkbox value="remember" color="primary" />} label="Remember me" />
               <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }} disabled={loading}>

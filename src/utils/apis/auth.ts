@@ -3,7 +3,7 @@
 import axiosWithConfig from "./axiosWithConfig";
 import { ILoginWithToken } from "../../utils/types/auth";
 
-export const login = async (email: string, password: string, avatarFile: File | null): Promise<ILoginWithToken> => {
+export const login = async (email: string, password: string, avatarFile: File | null | string): Promise<ILoginWithToken> => {
   try {
     const response = await axiosWithConfig.post<ILoginWithToken>("/login", {
       email,

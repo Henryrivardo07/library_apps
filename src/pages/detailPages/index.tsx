@@ -3,7 +3,6 @@ import { useParams } from "react-router-dom";
 import { IBookDetail } from "../../utils/types/book";
 import { getDetailBook } from "../../utils/apis/books";
 import Layout from "../../components/main-layout";
-import ButtonDarkMode from "@/components/ui/button-dark-mode";
 import { useDarkMode } from "@/context/DarkModeContext"; // Import useDarkMode
 
 const DetailPages = () => {
@@ -35,14 +34,13 @@ const DetailPages = () => {
 
   return (
     <Layout>
-      <ButtonDarkMode />
       {book ? (
-        <div className={`container mx-auto my-8 p-4 shadow-lg rounded-lg ${darkMode ? "bg-gray-800 text-white" : "bg-white text-gray-900"}`}>
+        <div className={`min-h-screen container mx-auto my-8 p-4 shadow-lg rounded-lg ${darkMode ? "bg-gray-800 text-white" : "bg-white text-gray-900 "}`}>
           <div className="flex flex-col md:flex-row">
-            <div className="md:w-1/3 flex justify-center mb-4 md:mb-0">
+            <div className="md:w-1/3 flex justify-center mb-4 md:mb-0 mt-20">
               <img className="w-60 rounded-lg shadow-md" src={book.cover_image} alt={book.title} />
             </div>
-            <div className="md:w-2/3 md:pl-6">
+            <div className="md:w-2/3 md:pl-6 mt-20">
               <h1 className="text-3xl font-bold mb-2">{book.title}</h1>
               <h2 className="text-xl mb-2">Author: {book.author}</h2>
               <h2 className="text-xl mb-2">Category: {book.category}</h2>

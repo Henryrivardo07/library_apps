@@ -18,12 +18,14 @@ import axiosWithConfig from "../../utils/apis/axiosWithConfig";
 import { IRegister } from "../../utils/types/auth";
 import Cookies from "js-cookie";
 import { useNavigate } from "react-router-dom";
+import { useDarkMode } from "../../context/DarkModeContext"; // assuming this context is implemented
 
 function SignUp() {
   const [avatar, setAvatar] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
+  const { darkMode } = useDarkMode(); // assuming this hook provides dark mode state
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -70,8 +72,8 @@ function SignUp() {
 
   return (
     <Layout>
-      <ThemeProvider theme={createTheme()}>
-        <Container component="main" maxWidth="xs">
+      <ThemeProvider theme={createTheme({ palette: { mode: darkMode ? "dark" : "light" } })}>
+        <Container component="main" maxWidth="xs" className="mb-10">
           <CssBaseline />
           <Box
             sx={{
@@ -81,37 +83,48 @@ function SignUp() {
               alignItems: "center",
             }}
           >
-            <label htmlFor="upload-avatar">
-              <input id="upload-avatar" type="file" style={{ display: "none" }} onChange={handleImageUpload} />
+            <Box
+              sx={{
+                backgroundColor: darkMode ? "rgba(31, 41, 55, 0.8)" : "rgba(255, 255, 255, 0.8)",
+                boxShadow: "0px 3px 6px rgba(0, 0, 0, 0.1)",
+                borderRadius: "8px",
+                padding: "32px",
+                width: "100%",
+                maxWidth: "400px",
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+              }}
+            >
               <Avatar sx={{ m: 1, bgcolor: "secondary.main", cursor: "pointer" }} src={avatar || ""}>
                 {!avatar && <LockOutlinedIcon />}
               </Avatar>
-            </label>
-            <Typography component="h1" variant="h5">
-              Sign up
-            </Typography>
-            <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
-              <TextField margin="normal" required fullWidth id="fullName" label="Full Name" name="fullName" autoComplete="name" autoFocus />
-              <TextField margin="normal" required fullWidth id="email" label="Email Address" name="email" autoComplete="email" />
-              <TextField margin="normal" required fullWidth name="phoneNumber" label="Phone Number" type="tel" id="phoneNumber" autoComplete="tel" />
-              <TextField margin="normal" required fullWidth name="password" label="Password" type="password" id="password" autoComplete="new-password" />
-              <TextField margin="normal" required fullWidth name="retypePassword" label="Retype Password" type="password" id="retypePassword" autoComplete="new-password" />
-              <FormControlLabel control={<Checkbox value="remember" color="primary" />} label="Remember me" />
-              <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }} disabled={loading}>
-                {loading ? "Signing Up..." : "Sign Up"}
-              </Button>
-              {error && (
-                <Typography variant="body2" color="error" align="center">
-                  {error}
-                </Typography>
-              )}
-              <Grid container>
-                <Grid item xs>
-                  <Link href="/signin" variant="body2">
-                    Already have an account? Sign In
-                  </Link>
+              <Typography component="h1" variant="h5" sx={{ mt: 2 }}>
+                Sign up
+              </Typography>
+              <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1, width: "100%" }}>
+                <TextField margin="normal" required fullWidth id="fullName" label="Full Name" name="fullName" autoComplete="name" autoFocus />
+                <TextField margin="normal" required fullWidth id="email" label="Email Address" name="email" autoComplete="email" />
+                <TextField margin="normal" required fullWidth name="phoneNumber" label="Phone Number" type="tel" id="phoneNumber" autoComplete="tel" />
+                <TextField margin="normal" required fullWidth name="password" label="Password" type="password" id="password" autoComplete="new-password" />
+                <TextField margin="normal" required fullWidth name="retypePassword" label="Retype Password" type="password" id="retypePassword" autoComplete="new-password" />
+                <FormControlLabel control={<Checkbox value="remember" color="primary" />} label="Remember me" />
+                <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }} disabled={loading}>
+                  {loading ? "Signing Up..." : "Sign Up"}
+                </Button>
+                {error && (
+                  <Typography variant="body2" color="error" align="center">
+                    {error}
+                  </Typography>
+                )}
+                <Grid container>
+                  <Grid item xs>
+                    <Link href="/signin" variant="body2">
+                      Already have an account? Sign In
+                    </Link>
+                  </Grid>
                 </Grid>
-              </Grid>
+              </Box>
             </Box>
           </Box>
         </Container>
