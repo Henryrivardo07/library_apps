@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from "react";
+import * as React from "react";
+import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { IBookDetail } from "../../utils/types/book";
 import { getDetailBook } from "../../utils/apis/books";
@@ -16,7 +17,8 @@ const DetailPages = () => {
     const fetchBook = async () => {
       try {
         if (id_book) {
-          const fetchedBook: IBookDetail = await getDetailBook(id_book);
+          const fetchedBook: any = await getDetailBook(id_book);
+          console.log("Fetched book:", fetchedBook); // Tambahkan ini untuk melihat hasil fetchedBook
           setBook(fetchedBook);
         }
       } catch (err: any) {

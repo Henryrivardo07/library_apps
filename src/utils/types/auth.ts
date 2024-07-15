@@ -20,3 +20,13 @@ export interface AuthContextType {
   avatar: string | null;
   role: string | null; // Role can be null initially or string
 }
+
+export interface IRegister {
+  full_name: string;
+  email: string;
+  password: string;
+  role: string;
+  address: string;
+  phone_number: number;
+  token: string;
+}

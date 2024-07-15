@@ -22,13 +22,22 @@ const EditBook: React.FC = () => {
 
   useEffect(() => {
     const loadBook = async () => {
-      try {
-        const bookData = await getDetailBook(id);
-        setBook(bookData);
-        setLoading(false);
-      } catch (error) {
-        console.error("Error fetching book:", error);
-        setLoading(false);
+      if (id) {
+        try {
+          const bookData = await getDetailBook(id);
+
+          setBook(bookData[0]); // or however you want to handle the bookData
+
+          setLoading(false);
+        } catch (error) {
+          console.error("Error fetching book:", error);
+
+          setLoading(false);
+        }
+      } else {
+        // handle the case where id is undefined
+
+        console.error("No id provided");
       }
     };
 
@@ -42,11 +51,17 @@ const EditBook: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    try {
-      await updateBook(id, book);
-      navigate("/managebook");
-    } catch (error) {
-      console.error("Error updating book:", error);
+
+    if (id) {
+      try {
+        await updateBook(id, book);
+
+        navigate("/managebook");
+      } catch (error) {
+        console.error("Error updating book:", error);
+      }
+    } else {
+      console.error("No id provided");
     }
   };
 

@@ -6,13 +6,12 @@ import { IPagination, IRespone } from "@/utils/types/api";
 import BookCard from "@/components/book-card";
 import { Link } from "react-router-dom";
 import Layout from "@/components/main-layout";
-import ButtonDarkMode from "@/components/ui/button-dark-mode";
+
 import { useDarkMode } from "@/context/DarkModeContext"; // Import useDarkMode
 
 const ShowAll = () => {
   const [books, setBooks] = useState<IRespone<IPagination<IBook[]>> | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const [loading, setLoading] = useState(true);
   const { darkMode } = useDarkMode(); // Gunakan useDarkMode untuk mendapatkan status dark mode
 
   const getBooks = async () => {

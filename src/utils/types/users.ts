@@ -1,6 +1,6 @@
 import * as z from "zod";
 
-import { ACCEPTED_IMAGE_TYPES, IRole, MAX_MB, MAX_UPLOAD_SIZE } from "@/utils/constant";
+import { ACCEPTED_IMAGE_TYPES, IRole, MAX_MB, MAX_UPLOAD_SIZE } from "../types/constants";
 
 export const profileSchema = z.object({
   email: z.string().min(1, { message: "Email is required" }).email("Not a valid email"),

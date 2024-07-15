@@ -22,12 +22,13 @@ export const getBooks = async (): Promise<{ payload: { datas: any[] } }> => {
 };
 
 // Fungsi untuk meminjam buku
-export const Borrow = async (bookIds: number[], borrowDate: string): Promise<any> => {
+export const Borrow = async (bookIds: number[], borrowDate: string, token: string | null): Promise<any> => {
   try {
     const formattedDate = moment(borrowDate).toISOString();
     const response = await axiosWithConfig.post("/borrows", {
       bookId: bookIds,
       borrow_date: formattedDate,
+      token: token,
     });
     return response.data;
   } catch (error: any) {

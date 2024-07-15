@@ -1,5 +1,3 @@
-// src/pages/SignIn.tsx
-
 import React, { useState } from "react";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
@@ -56,7 +54,7 @@ const SignIn: React.FC = () => {
       if (response.payload && response.payload.token) {
         const { token, avatar, role } = response.payload;
         contextLogin(token, avatar, role); // Pass role to contextLogin
-        toast.success("Login successful!");
+        toast.success("Login successful!"); // Tambahkan toast sukses disini
 
         // Redirect based on role
         if (role === "admin") {
