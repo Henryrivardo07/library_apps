@@ -1,4 +1,3 @@
-// @ts-ignore
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDarkMode } from "@/context/DarkModeContext"; // Import useDarkMode

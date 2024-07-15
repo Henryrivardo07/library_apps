@@ -1,4 +1,3 @@
-// @ts-ignore
 import React from "react";
 import { useDarkMode } from "../../context/DarkModeContext";
 import { Label } from "@/components/ui/label";

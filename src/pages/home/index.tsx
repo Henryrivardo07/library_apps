@@ -1,5 +1,3 @@
-// src/pages/home/Home.tsx
-// @ts-ignore
 import React from "react";
 
 import Layout from "../../components/main-layout";

@@ -1,5 +1,3 @@
-// src/pages/ManageBook.tsx
-
 import React, { useEffect, useState } from "react";
 import { fetchBooks } from "@/utils/apis/books";
 import { deleteBookAdmin } from "@/utils/apis/borrow";

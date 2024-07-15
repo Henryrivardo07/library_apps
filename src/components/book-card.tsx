@@ -1,4 +1,3 @@
-// components/BookCard.tsx
 import React from "react";
 import { IBook } from "../utils/types/book";
 import { Link } from "react-router-dom";

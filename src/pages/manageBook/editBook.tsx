@@ -1,5 +1,3 @@
-// src/components/EditBook.tsx
-
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { getDetailBook, updateBook } from "@/utils/apis/books";

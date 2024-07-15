@@ -1,4 +1,3 @@
-// @ts-ignore
 import React from "react";
 import { fetchBooks } from "../../utils/apis/books";
 import { useState, useEffect } from "react";
