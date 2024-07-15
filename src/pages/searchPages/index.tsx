@@ -23,8 +23,8 @@ const SearchPage: React.FC = () => {
         if (query) {
           const response = await searchBook(query);
           console.log("Pencarian buku:", response); // Debugging log
-          if (response && response.length > 0) {
-            setBooks(response);
+          if (response && response.payload && response.payload.datas && response.payload.datas.length > 0) {
+            setBooks(response.payload.datas);
             setError(null);
           } else {
             setBooks([]);
