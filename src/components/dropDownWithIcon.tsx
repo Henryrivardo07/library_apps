@@ -1,5 +1,3 @@
-// src/components/dropdown-with-image.tsx
-
 import React, { useState, useEffect } from "react";
 import Avatar from "@mui/material/Avatar";
 import { DropdownProps } from "../utils/types/dropdown";
@@ -8,9 +6,8 @@ import { useAuth } from "../context/authContext";
 import Cookies from "js-cookie";
 import ButtonDarkMode from "./ui/button-dark-mode";
 
-const DropdownWithImage: React.FC<DropdownProps> = ({ optionsProps, placeholder, onSelect }) => {
+const DropdownWithImage: React.FC<DropdownProps> = ({ optionsProps, onSelect }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [selectedOption, setSelectedOption] = useState<string | null>(null);
   const [avatar, setAvatar] = useState<string | null>(null);
   const navigate = useNavigate();
   const { token, logout, avatar: authAvatar, role } = useAuth();
@@ -20,7 +17,6 @@ const DropdownWithImage: React.FC<DropdownProps> = ({ optionsProps, placeholder,
   }, [authAvatar]);
 
   const handleOptionClick = (option: string) => {
-    setSelectedOption(option);
     setIsOpen(false);
     onSelect(option);
 

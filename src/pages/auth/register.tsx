@@ -19,6 +19,7 @@ import { IRegister } from "../../utils/types/auth";
 import Cookies from "js-cookie";
 import { useNavigate } from "react-router-dom";
 import { useDarkMode } from "../../context/DarkModeContext"; // assuming this context is implemented
+import { toast, Toaster } from "react-hot-toast"; // Import toast
 
 function SignUp() {
   const [avatar, setAvatar] = useState<string | null>(null);
@@ -36,25 +37,36 @@ function SignUp() {
     const fullName = data.get("fullName") as string;
     const phoneNumber = data.get("phoneNumber") as string;
     const retypePassword = data.get("retypePassword") as string;
+    const address = data.get("address") as string;
+
+    if (password !== retypePassword) {
+      setError("Passwords do not match");
+      setLoading(false);
+      return;
+    }
 
     try {
       const response = await axiosWithConfig.post<IRegister>("/signup", {
+        full_name: fullName,
         email,
         password,
-        fullName,
-        phoneNumber,
-        retypePassword,
+        role: "user",
+        address,
+        phone_number: phoneNumber,
       });
+
       console.log("Signup response:", response.data);
 
       // Set token in cookies
       Cookies.set("token", response.data.token, { expires: 7 }); // Expires in 7 days
 
       setLoading(false);
-      navigate("/"); // Redirect to main page after successful signup
+      toast.success("Registration successful!"); // Display success toast
+      navigate("/signin"); // Redirect to signin page after successful signup
     } catch (error: any) {
       console.error("Error signing up:", error.response?.data || error.message);
       setError(error.response?.data.message || "Network response was not ok");
+      toast.error(error.response?.data.message || "Registration failed!"); // Display error toast
       setLoading(false);
     }
   };
@@ -73,6 +85,7 @@ function SignUp() {
   return (
     <Layout>
       <ThemeProvider theme={createTheme({ palette: { mode: darkMode ? "dark" : "light" } })}>
+        <Toaster /> {/* Add Toaster component */}
         <Container component="main" maxWidth="xs" className="mb-10">
           <CssBaseline />
           <Box
@@ -106,17 +119,22 @@ function SignUp() {
                 <TextField margin="normal" required fullWidth id="fullName" label="Full Name" name="fullName" autoComplete="name" autoFocus />
                 <TextField margin="normal" required fullWidth id="email" label="Email Address" name="email" autoComplete="email" />
                 <TextField margin="normal" required fullWidth name="phoneNumber" label="Phone Number" type="tel" id="phoneNumber" autoComplete="tel" />
+                <TextField margin="normal" required fullWidth name="address" label="Address" type="text" id="address" autoComplete="address" />
                 <TextField margin="normal" required fullWidth name="password" label="Password" type="password" id="password" autoComplete="new-password" />
                 <TextField margin="normal" required fullWidth name="retypePassword" label="Retype Password" type="password" id="retypePassword" autoComplete="new-password" />
                 <FormControlLabel control={<Checkbox value="remember" color="primary" />} label="Remember me" />
-                <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }} disabled={loading}>
-                  {loading ? "Signing Up..." : "Sign Up"}
+                <Button variant="outlined" component="label">
+                  Upload Avatar
+                  <input type="file" id="avatar" name="avatar" onChange={handleImageUpload} hidden />
                 </Button>
                 {error && (
                   <Typography variant="body2" color="error" align="center">
                     {error}
                   </Typography>
                 )}
+                <Button type="submit" fullWidth variant="contained" color="primary" disabled={loading} sx={{ mt: 3, mb: 2 }}>
+                  {loading ? "Signing Up..." : "Sign Up"}
+                </Button>
                 <Grid container>
                   <Grid item xs>
                     <Link href="/signin" variant="body2">

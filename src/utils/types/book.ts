@@ -9,6 +9,7 @@ export interface IBook {
   deletedAt: string | null;
   description: string;
   featured: boolean;
+  isbn: string;
 }
 
 export interface IBookDetail {

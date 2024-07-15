@@ -25,7 +25,7 @@ export function Dashboard() {
     try {
       const books = await fetchBorrowBooks();
       setBorrowedBooks(books);
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error fetching borrowed books:", error.message);
     } finally {
       setLoading(false);
@@ -42,7 +42,15 @@ export function Dashboard() {
   };
 
   const handleFilter = (key: string, value: string) => {
-    setFilter({ ...filter, [key]: value as "all" | "true" | "false" });
+    switch (key) {
+      case "available":
+        setFilter({ ...filter, available: value as "all" | "true" | "false" });
+
+        break;
+
+      default:
+        throw new Error(`Invalid filter key: ${key}`);
+    }
   };
 
   const handleEdit = (id: number) => {
@@ -53,9 +61,11 @@ export function Dashboard() {
   const handleDelete = async (id: number) => {
     try {
       await deleteBook(id);
-      setBorrowedBooks((prevBooks) => prevBooks.filter((book) => book.id !== id));
+
+      setBorrowedBooks((prevBooks) => prevBooks.filter((book) => Number(book.id) !== id));
+
       console.log(`Deleted book with ID ${id}`);
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error deleting book:", error.message);
     }
   };
@@ -71,10 +81,12 @@ export function Dashboard() {
         return book.available === (filter.available === "true");
       })
       .sort((a, b) => {
+        const aAny = a as { [key: string]: any };
+        const bAny = b as { [key: string]: any };
         if (sort.order === "asc") {
-          return a[sort.key] > b[sort.key] ? 1 : -1;
+          return aAny[sort.key] > bAny[sort.key] ? 1 : -1;
         } else {
-          return a[sort.key] < b[sort.key] ? -1 : 1;
+          return aAny[sort.key] < bAny[sort.key] ? -1 : 1;
         }
       });
   }, [borrowedBooks, search, sort, filter]);
@@ -84,19 +96,12 @@ export function Dashboard() {
       <div className="container mx-auto px-4 py-8">
         <div className="flex items-center justify-between mb-6">
           <h1 className="text-2xl font-bold">Borrowed Books</h1>
-          <Button
+          <button
             onClick={() => navigate("/managebook")}
-            sx={{
-              border: "1px solid",
-              borderColor: "primary.main",
-              "&:hover": {
-                backgroundColor: "primary.main",
-                color: "white",
-              },
-            }}
+            className="px-4 py-2 border border-solid border-primary-main rounded-lg hover:border-blue-500 hover:bg-blue-500 hover:text-white hover:shadow-lg transition duration-300 ease-in-out transform hover:-translate-y-1"
           >
-            Manage All Books
-          </Button>
+            Manage All Book
+          </button>
           {/* Tombol Manage All Books */}
         </div>
         <div className="flex items-center justify-between mb-4">
@@ -152,10 +157,11 @@ export function Dashboard() {
                     <TableCell>{new Date(book.borrow_date).toLocaleDateString()}</TableCell>
                     <TableCell>{book.full_name}</TableCell>
                     <TableCell>
-                      <Button size="icon" variant="ghost" onClick={() => handleEdit(book.id)}>
+                      <Button size="icon" variant="ghost" onClick={() => handleEdit(Number(book.id))}>
                         Edit
                       </Button>
-                      <Button size="icon" variant="ghost" onClick={() => handleDelete(book.id)}>
+
+                      <Button size="icon" variant="ghost" onClick={() => handleDelete(Number(book.id))}>
                         Delete
                       </Button>
                     </TableCell>
