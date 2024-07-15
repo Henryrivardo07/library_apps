@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { getCategoryBook } from "@/utils/apis/books";
 import { IBook } from "@/utils/types/book";

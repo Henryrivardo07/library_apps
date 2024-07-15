@@ -1,4 +1,3 @@
-import React from "react";
 import { fetchBooks } from "../../utils/apis/books";
 import { useState, useEffect } from "react";
 import { IBook } from "../../utils/types/book";

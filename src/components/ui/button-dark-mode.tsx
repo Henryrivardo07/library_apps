@@ -1,4 +1,3 @@
-import React from "react";
 import { useDarkMode } from "../../context/DarkModeContext";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { IBook } from "../utils/types/book";
 import { fetchBooks } from "../utils/apis/books";
 import BookCard from "./book-card";
