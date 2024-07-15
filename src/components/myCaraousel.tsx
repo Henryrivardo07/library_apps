@@ -1,4 +1,5 @@
 // src/components/ui/MyCaraousel.tsx
+// @ts-ignore
 import React, { useState, useEffect } from "react";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
 import { getNewBook } from "@/utils/apis/books";
